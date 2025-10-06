@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mcp On Android</string>
+
+    <string name="auto_shell_key">auto_shell</string>
+    <string name="startup_command_key">startup_command</string>
+    <string name="buffer_size_key">buffer_size</string>
+    <string name="checking_device_setup">Checking Device Setup</string>
+</resources>
