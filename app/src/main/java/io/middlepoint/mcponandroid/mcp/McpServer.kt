@@ -61,6 +61,10 @@ class McpServer(
     addLaunchTvAppTool(server)
     addGetInstalledTvAppsTool(server)
     addTakeScreenshotTool(server)
+    addSendKeyEventTool(server)
+    addSendNavKeyEventTool(server)
+    addTypeTextTool(server)
+    addTapScreenTool(server)
   }
 
   private fun addLaunchTvAppTool(server: Server) {
@@ -116,7 +120,7 @@ class McpServer(
       description =
         "Takes a screenshot of the device screen and returns it as a base64 encoded image.",
       inputSchema = Tool.Input(),
-    ) {
+    ) { 
       val remotePath = "/sdcard/screenshot_${System.currentTimeMillis()}.png"
       val localFile = File(context.cacheDir, "screenshot.png")
 
@@ -168,6 +172,170 @@ class McpServer(
       }
     }
   }
+
+  private fun addSendKeyEventTool(server: Server) {
+    server.addTool(
+      name = "send_key_event",
+      description = "Sends a key event to the device. A list of key codes can be found at https://developer.android.com/reference/android/view/KeyEvent",
+      inputSchema = Tool.Input(
+        properties = buildJsonObject {
+          putJsonObject("key_code") {
+            put("type", "string")
+            put("description", "The key code to send to the device.")
+          }
+        },
+        required = listOf("key_code")
+      )
+    ) { request ->
+      val keyCode = request.arguments["key_code"]?.jsonPrimitive?.content
+        ?: return@addTool CallToolResult(
+          content = listOf(TextContent("The 'key_code' parameter is required."))
+        )
+      val result = adb.adbCommand("shell input keyevent $keyCode")
+      logger.d { "send_key_event: $result" }
+      if (result.startsWith("Error")) {
+        CallToolResult(
+          content = listOf(TextContent("Failed to send key event: $result"))
+        )
+      } else {
+        CallToolResult(
+          content = listOf(TextContent("Key event '$keyCode' sent successfully."))
+        )
+      }
+    }
+  }
+
+  private fun addSendNavKeyEventTool(server: Server) {
+    server.addTool(
+      name = "send_nav_key_event",
+      description = "Sends a navigational key event to the device. Allowed values are 'up', 'down', 'left', 'right', 'select', 'back', and 'home'.",
+      inputSchema = Tool.Input(
+        properties = buildJsonObject {
+          putJsonObject("nav_key") {
+            put("type", "string")
+            put(
+              "description",
+              "The navigational key to send. Allowed values: 'up', 'down', 'left', 'right', 'select', 'back', 'home'."
+            )
+          }
+        },
+        required = listOf("nav_key")
+      )
+    ) { request ->
+      val navKey = request.arguments["nav_key"]?.jsonPrimitive?.content
+        ?: return@addTool CallToolResult(
+          content = listOf(TextContent("The 'nav_key' parameter is required."))
+        )
+
+      val keyCode = when (navKey.lowercase()) {
+        "up" -> "KEYCODE_DPAD_UP"
+        "down" -> "KEYCODE_DPAD_DOWN"
+        "left" -> "KEYCODE_DPAD_LEFT"
+        "right" -> "KEYCODE_DPAD_RIGHT"
+        "select" -> "KEYCODE_DPAD_CENTER"
+        "back" -> "KEYCODE_BACK"
+        "home" -> "KEYCODE_HOME"
+        else -> null
+      }
+
+      if (keyCode == null) {
+        return@addTool CallToolResult(
+          content = listOf(TextContent("Invalid nav_key: '$navKey'. Use one of 'up', 'down', 'left', 'right', 'select', 'back', 'home'."))
+        )
+      }
+
+      val result = adb.adbCommand("shell input keyevent $keyCode")
+      logger.d { "send_nav_key_event: $result" }
+
+      if (result.startsWith("Error")) {
+        CallToolResult(
+          content = listOf(TextContent("Failed to send nav key event: $result"))
+        )
+      } else {
+        CallToolResult(
+          content = listOf(TextContent("Nav key event '$navKey' sent successfully."))
+        )
+      }
+    }
+  }
+
+  private fun addTypeTextTool(server: Server) {
+    server.addTool(
+      name = "type_text",
+      description = "Types the given text into the current input field.",
+      inputSchema = Tool.Input(
+        properties = buildJsonObject {
+          putJsonObject("text") {
+            put("type", "string")
+            put("description", "The text to type.")
+          }
+        },
+        required = listOf("text")
+      )
+    ) { request ->
+      val textToType = request.arguments["text"]?.jsonPrimitive?.content
+        ?: return@addTool CallToolResult(
+          content = listOf(TextContent("The 'text' parameter is required."))
+        )
+
+      val sanitizedText = textToType.replace(" ", "%s")
+      val result = adb.adbCommand("shell input text '$sanitizedText'")
+      logger.d { "type_text: $result" }
+
+      if (result.startsWith("Error")) {
+        CallToolResult(
+          content = listOf(TextContent("Failed to type text: $result"))
+        )
+      } else {
+        CallToolResult(
+          content = listOf(TextContent("Text typed successfully."))
+        )
+      }
+    }
+  }
+
+  private fun addTapScreenTool(server: Server) {
+    server.addTool(
+      name = "tap_screen",
+      description = "Taps the screen at the given x and y coordinates.",
+      inputSchema = Tool.Input(
+        properties = buildJsonObject {
+          putJsonObject("x") {
+            put("type", "integer")
+            put("description", "The x coordinate to tap.")
+          }
+          putJsonObject("y") {
+            put("type", "integer")
+            put("description", "The y coordinate to tap.")
+          }
+        },
+        required = listOf("x", "y")
+      )
+    ) { request ->
+      val x = request.arguments["x"]?.jsonPrimitive?.content?.toIntOrNull()
+        ?: return@addTool CallToolResult(
+            content = listOf(TextContent("The 'x' parameter is required and must be an integer."))
+        )
+      val y = request.arguments["y"]?.jsonPrimitive?.content?.toIntOrNull()
+        ?: return@addTool CallToolResult(
+            content = listOf(TextContent("The 'y' parameter is required and must be an integer."))
+        )
+
+      val result = adb.adbCommand("shell input tap $x $y")
+      logger.d { "tap_screen: $result" }
+
+      if (result.startsWith("Error")) {
+        CallToolResult(
+          content = listOf(TextContent("Failed to tap screen: $result"))
+        )
+      } else {
+        CallToolResult(
+          content = listOf(TextContent("Tapped screen at ($x, $y) successfully."))
+        )
+      }
+    }
+  }
+
 
   /**
    * Starts an SSE (Server Sent Events) MCP server using the Ktor framework and the specified port.
