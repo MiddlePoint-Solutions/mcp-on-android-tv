@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
+import co.touchlab.kermit.Logger
 import io.middlepoint.mcponandroid.BuildConfig
 import io.middlepoint.mcponandroid.R
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,8 @@ class ADB(
                 instance ?: ADB(context).also { instance = it }
             }
     }
+
+    private val logger = Logger.withTag("ADB")
 
     private val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -501,6 +504,18 @@ class ADB(
             println(msg)
             flush()
         }
+    }
+
+    /**
+     * Run an ADB command and get the output.
+     */
+    fun adbCommand(command: String): String {
+        val process = adb(false, command.split(" "))
+        val output = process.inputStream.bufferedReader().use { it.readText() }
+        val errors = process.errorStream.bufferedReader().use { it.readText() }
+        val exitCode = process.waitFor()
+        logger.d { "exitCode: $exitCode" }
+        return if (exitCode == 0) output else "Error ($exitCode): $errors"
     }
 
     /**

@@ -10,10 +10,8 @@ import io.ktor.server.plugins.cors.routing.CORS
 import io.middlepoint.mcponandroid.utils.ADB
 import io.modelcontextprotocol.kotlin.sdk.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.Implementation
-import io.modelcontextprotocol.kotlin.sdk.ReadResourceResult
 import io.modelcontextprotocol.kotlin.sdk.ServerCapabilities
 import io.modelcontextprotocol.kotlin.sdk.TextContent
-import io.modelcontextprotocol.kotlin.sdk.TextResourceContents
 import io.modelcontextprotocol.kotlin.sdk.Tool
 import io.modelcontextprotocol.kotlin.sdk.server.Server
 import io.modelcontextprotocol.kotlin.sdk.server.ServerOptions
@@ -32,7 +30,7 @@ class McpServer(private val adb: ADB) {
   private fun configureServer(): Server {
     val server = Server(
       Implementation(
-        name = "AndroidTV MCP",
+        name = "Android TV MCP",
         version = "0.1.0",
       ),
       ServerOptions(
@@ -48,24 +46,27 @@ class McpServer(private val adb: ADB) {
     // Add a tool
     server.addTool(
       name = "launch_tv_app",
-      description = "Launch a TV application by its name",
+      description = "Launch a TV application by its package name",
       inputSchema = Tool.Input(
         properties = buildJsonObject {
-          putJsonObject("app_name") {
+          putJsonObject("app_package") {
             put("type", "string")
-            put("description", "The name of the app to be launched")
+            put("description", "The package of the app to be launched")
           }
         },
-        required = listOf("app_name")
+        required = listOf("app_package")
       ),
     ) { request ->
 
-      val appName =
-        request.arguments["app_name"]?.jsonPrimitive?.content ?: return@addTool CallToolResult(
-          content = listOf(TextContent("The 'app_name' parameter is required."))
+      val packageName =
+        request.arguments["app_package"]?.jsonPrimitive?.content ?: return@addTool CallToolResult(
+          content = listOf(TextContent("The 'app_package' parameter is required."))
         )
 
-      CallToolResult(content = listOf(TextContent("Launching $appName succesfully")))
+      val result = adb.adbCommand("shell monkey -p $packageName 1")
+      logger.d { "list-tv-apps: $result" }
+
+      CallToolResult(content = listOf(TextContent("Launching $packageName succesfully")))
     }
 
 
@@ -75,12 +76,13 @@ class McpServer(private val adb: ADB) {
       description = "Get a list of installed TV applications",
       inputSchema = Tool.Input(),
     ) {
-      val result = adb.sendToShellProcess("pm list packages -3")
+      val result = adb.adbCommand("shell pm list packages -3")
       logger.d { "list-tv-apps: $result" }
 
       CallToolResult(
         content = listOf(
           TextContent(
+            result
           )
         ),
       )
@@ -98,8 +100,8 @@ class McpServer(private val adb: ADB) {
    * @return Unit This method does not return a value.
    */
   suspend fun runSseMcpServerUsingKtorPlugin(port: Int) {
-    println("Starting sse server on port $port")
-    println("Use inspector to connect to the http://localhost:$port/sse")
+    logger.d("Starting sse server on port $port")
+    logger.d("Use inspector to connect to the http://localhost:$port/sse")
     withContext(Dispatchers.IO) {
       embeddedServer(CIO, host = "0.0.0.0", port = port) {
 
