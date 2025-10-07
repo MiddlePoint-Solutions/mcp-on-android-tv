@@ -9,8 +9,8 @@ import androidx.preference.PreferenceManager
 import co.touchlab.kermit.Logger
 import io.middlepoint.mcponandroid.utils.ADB
 import io.middlepoint.mcponandroid.utils.DnsDiscover
-import io.middlepoint.mcponandroid.utils.HomeState
-import io.middlepoint.mcponandroid.utils.mapToHomeState
+import io.middlepoint.mcponandroid.ui.state.HomeState
+import io.middlepoint.mcponandroid.ui.state.mapToHomeState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

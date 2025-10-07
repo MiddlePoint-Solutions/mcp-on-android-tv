@@ -1,6 +1,6 @@
 package io.middlepoint.mcponandroid.ui.screens
 
-import io.middlepoint.mcponandroid.utils.HomeState
+import io.middlepoint.mcponandroid.ui.state.HomeState
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,6 +1,7 @@
-package io.middlepoint.mcponandroid.utils
+package io.middlepoint.mcponandroid.ui.state
 
-import io.middlepoint.mcponandroid.utils.HomeState.*
+import io.middlepoint.mcponandroid.ui.state.HomeState.*
+import io.middlepoint.mcponandroid.utils.AdbState
 
 sealed class HomeState {
   data object Connecting : HomeState()
