@@ -3,6 +3,7 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlinx.serialization)
+  alias(libs.plugins.ktlint)
 }
 
 android {
@@ -73,6 +74,8 @@ dependencies {
   implementation(libs.ktor.server.sse)
   implementation(libs.ktor.client.content.negotiation)
   implementation(libs.ktor.serialization.kotlinx.json)
+
+  ktlintRuleset(libs.ktlint.ruleset.compose)
 
   androidTestImplementation(platform(libs.androidx.compose.bom))
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)

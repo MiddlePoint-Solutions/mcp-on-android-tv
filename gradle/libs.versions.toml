@@ -4,6 +4,7 @@ kotlin = "2.2.20"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
 composeBom = "2025.09.01"
+ktlintRulesetCompose = "1.4.1"
 tvFoundation = "1.0.0-alpha12"
 tvMaterial = "1.0.1"
 lifecycleRuntimeKtx = "2.9.4"
@@ -15,6 +16,7 @@ androidx-lifecycle = "2.9.4"
 smoothMotion = "1.0.1"
 mcpVersion = "0.7.2"
 ktor = "3.3.0"
+ktlint = "13.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +37,7 @@ androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-runtime"
 
 androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+ktlint-ruleset-compose = { module = "com.pinterest.ktlint:ktlint-ruleset-compose", version.ref = "ktlintRulesetCompose" }
 smoothmotion = { group = "com.github.abdullahalhakimi", name = "SmoothMotion", version.ref = "smoothMotion" }
 mcp = { group = "io.modelcontextprotocol", name = "kotlin-sdk", version.ref = "mcpVersion" }
 mcp-kotlin-server = { group = "io.modelcontextprotocol", name = "kotlin-sdk-server", version.ref = "mcpVersion" }
@@ -54,4 +57,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = {id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
 
