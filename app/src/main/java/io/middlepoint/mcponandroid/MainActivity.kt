@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     adb = ADB.getInstance(applicationContext)
-    mcpServer = McpServer(adb)
+    mcpServer = McpServer(adb, applicationContext)
 
     serverJob = serverScope.launch {
       mcpServer.runSseMcpServerUsingKtorPlugin(8081)
