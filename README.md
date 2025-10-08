@@ -19,7 +19,6 @@ By leveraging ADB (Android Debug Bridge), it allows local network control of you
 - Works with the **MCP Kotlin SDK 0.7.2** (official SDK).
 - Local network device control via LLM clients.
 - Current communication method: **SSE (deprecated)**.
-    - Reason: MCP HTTP streaming is not yet supported in Ktor CIO engine.
 
 ## Installation & Usage
 
