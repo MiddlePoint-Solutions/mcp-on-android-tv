@@ -20,6 +20,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Mcp On Android"
+rootProject.name = "Mcp on Android TV"
 include(":app")
  

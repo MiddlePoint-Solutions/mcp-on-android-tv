@@ -4,6 +4,11 @@ A Model Context Protocol (MCP) server running directly on your Android TV device
 
 By leveraging ADB (Android Debug Bridge), it allows local network control of your Android TV through any LLM agent or client that supports remote MCP servers. This makes it possible to open apps, list apps, and run other commands on your TV using natural language.
 
+> ⚠️ **Work in Progress**  
+> This project is in an early stage of development. Features may be incomplete, unstable, or subject to change.  
+> Contributions and feedback are very welcome as the project evolves.
+
+
 ## Why Android TV?
 
 - **Simpler ADB setup**: On Android TV, ADB debugging can be activated and connected to without requiring pairing.
