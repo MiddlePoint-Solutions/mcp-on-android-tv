@@ -1,10 +1,8 @@
-# MCP on Android
+# MCP on Android TV
 
-**MCP on AndroidTV** is an open-source MCP server running directly on Android devices, specifically designed for **Android TV**.
+A Model Context Protocol (MCP) server running directly on your Android TV devices.
 
 By leveraging ADB (Android Debug Bridge), it allows local network control of your Android TV through any LLM agent or client that supports remote MCP servers. This makes it possible to open apps, list apps, and run other commands on your TV using natural language.
-
----
 
 ## Why Android TV?
 
@@ -12,9 +10,7 @@ By leveraging ADB (Android Debug Bridge), it allows local network control of you
 - **Stable local connection**: Unlike wireless debugging on phones, the connection does not cycle, giving you a direct link to the device.
 - **MCP integration**: With MCP layered on top of ADB, any LLM client supporting custom MCP servers (such as [Goose](https://github.com/goose-ai) or [Claude Desktop](https://claude.ai)) can act as a controller for your TV.
 
-⚠️ **Note**: For security reasons this should only be made to work on your local network, exposing you TV to the internet is a big risk. 
-
----
+⚠️ **Note**: For security reasons this should only be made to work on your local network, exposing your TV to the internet is a big risk.
 
 ## Features
 
@@ -24,8 +20,6 @@ By leveraging ADB (Android Debug Bridge), it allows local network control of you
 - Local network device control via LLM clients.
 - Current communication method: **SSE (deprecated)**.
     - Reason: MCP HTTP streaming is not yet supported in Ktor CIO engine.
-
----
 
 ## Installation & Usage
 
@@ -42,7 +36,6 @@ By leveraging ADB (Android Debug Bridge), it allows local network control of you
     - List installed apps
     - More commands coming soon
 
----
 
 ## Contributing
 
@@ -51,8 +44,6 @@ Contributions are very welcome!
 - Submit a **pull request** with new features, tools, or fixes.
 - Ideas for extended control and utilities are encouraged.
 - Please follow typical open-source etiquette when submitting changes.
-
----
 
 ## License
 
