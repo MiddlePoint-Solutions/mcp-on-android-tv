@@ -5,4 +5,10 @@
     <string name="startup_command_key">startup_command</string>
     <string name="buffer_size_key">buffer_size</string>
     <string name="checking_device_setup">Checking Device Setup</string>
+    <string name="home_screen_title">MCP on Android TV</string>
+    <string name="indicator_color_label">Indicator Color</string>
+    <string name="status_running">Running</string>
+    <string name="status_not_running">Not Running</string>
+    <string name="address_not_available">Address not available</string>
+    <string name="status_label">Status: %1$s</string>
 </resources>

@@ -67,7 +67,9 @@ class DnsDiscover private constructor(
     val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return null
 
     // Ensure it's a valid Wi-Fi connection
-    if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+    if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+      capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+    ) {
       try {
         val interfaces = NetworkInterface.getNetworkInterfaces()
         while (interfaces.hasMoreElements()) {
