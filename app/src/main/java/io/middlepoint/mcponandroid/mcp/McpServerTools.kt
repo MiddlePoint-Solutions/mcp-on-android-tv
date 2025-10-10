@@ -146,7 +146,7 @@ class McpServerTools(
                 properties = buildJsonObject {
                     putJsonObject("key_code") {
                         put("type", "string")
-                        put("description", "The key code to send to the device.")
+                        put("description", "The key code to send to the device - starting with KEYCODE_")
                     }
                 },
                 required = listOf("key_code")
