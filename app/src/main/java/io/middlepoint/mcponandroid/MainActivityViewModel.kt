@@ -7,10 +7,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import co.touchlab.kermit.Logger
-import io.middlepoint.mcponandroid.utils.ADB
-import io.middlepoint.mcponandroid.utils.DnsDiscover
+import io.middlepoint.mcponandroid.mcp.McpServer
 import io.middlepoint.mcponandroid.ui.state.HomeState
 import io.middlepoint.mcponandroid.ui.state.mapToHomeState
+import io.middlepoint.mcponandroid.utils.ADB
+import io.middlepoint.mcponandroid.utils.DnsDiscover
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,13 +39,11 @@ class MainActivityViewModel(
         PreferenceManager
             .getDefaultSharedPreferences(application.applicationContext)
 
-    val adb = ADB.getInstance(getApplication<Application>().applicationContext)
+    private val adb = ADB.getInstance(getApplication<Application>().applicationContext)
+    private val mcpServer = McpServer.getInstance(getApplication<Application>().applicationContext)
+    val isMcpServerRunning = mcpServer.isRunning
 
-    val dnsDiscover =
-        DnsDiscover.getInstance(
-            application.applicationContext,
-            application.applicationContext.getSystemService(Context.NSD_SERVICE) as NsdManager,
-        )
+    private val dnsDiscover = DnsDiscover.getInstance(application.applicationContext)
 
     private val _viewModelHasStartedADB = MutableStateFlow(false)
     val viewModelHasStartedADB: StateFlow<Boolean> = _viewModelHasStartedADB.asStateFlow()

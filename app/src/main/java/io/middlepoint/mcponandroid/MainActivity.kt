@@ -26,7 +26,6 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Text
-import io.middlepoint.mcponandroid.mcp.McpServer
 import io.middlepoint.mcponandroid.ui.screens.Connecting
 import io.middlepoint.mcponandroid.ui.screens.ConnectingScreen
 import io.middlepoint.mcponandroid.ui.screens.Home
@@ -35,31 +34,13 @@ import io.middlepoint.mcponandroid.ui.screens.SetupADB
 import io.middlepoint.mcponandroid.ui.screens.SetupScreen
 import io.middlepoint.mcponandroid.ui.screens.mapToScreen
 import io.middlepoint.mcponandroid.ui.theme.McpAndroidTheme
-import io.middlepoint.mcponandroid.utils.ADB
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 @Suppress("ktlint:standard:no-consecutive-comments")
 class MainActivity : ComponentActivity() {
 
-  private var serverJob: Job? = null
-  private val serverScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-  private lateinit var adb: ADB
-  private lateinit var mcpServer: McpServer
-
   @OptIn(ExperimentalTvMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-    adb = ADB.getInstance(applicationContext)
-    mcpServer = McpServer(adb, applicationContext)
-
-    serverJob = serverScope.launch {
-      mcpServer.runSseMcpServerUsingKtorPlugin(8081)
-    }
 
     setContent {
       val viewModel by viewModels<MainActivityViewModel>()
@@ -85,9 +66,9 @@ class MainActivity : ComponentActivity() {
             exitTransition = { fadeOut(spring(stiffness = Spring.StiffnessMedium)) },
           ) {
             composable<Connecting> {
-              ConnectingScreen {
-                viewModel.startADBServer()
-              }
+              ConnectingScreen(
+                startAdbServer = { viewModel.startADBServer() }
+              )
             }
 
             composable<Home> {

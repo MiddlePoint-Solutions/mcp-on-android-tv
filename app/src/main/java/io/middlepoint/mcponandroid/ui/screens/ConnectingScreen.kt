@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,28 +24,28 @@ import io.middlepoint.mcponandroid.R
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun ConnectingScreen(
-    modifier: Modifier = Modifier,
-    startAdbServer: () -> Unit,
+  modifier: Modifier = Modifier,
+  startAdbServer: () -> Unit,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        RotatingCircleProgress(
-            modifier = Modifier.size(90.dp),
-            color = Color.White,
-        )
+  Column(
+    modifier = modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally,
+  ) {
+    RotatingCircleProgress(
+      modifier = Modifier.size(90.dp),
+      color = Color.White,
+    )
 
-        Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(30.dp))
 
-        Text(
-            text = stringResource(R.string.checking_device_setup),
-            style = MaterialTheme.typography.headlineLarge,
-        )
-    }
+    Text(
+      text = stringResource(R.string.checking_device_setup),
+      style = MaterialTheme.typography.headlineLarge,
+    )
+  }
 
-    LaunchedEffect(Unit) {
-        startAdbServer()
-    }
+  LaunchedEffect(Unit) {
+    startAdbServer()
+  }
 }
