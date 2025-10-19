@@ -25,6 +25,18 @@ By leveraging ADB (Android Debug Bridge), it allows local network control of you
 - Local network device control via LLM clients.
 - Current communication method: **SSE (deprecated)**.
 
+## Exposed MCP Tools
+
+The MCP server currently supports the following tools:
+
+- [x] **launch_tv_app** — Launch a TV application by its package name.  
+- [x] **get_installed_tv_apps** — Get a list of installed TV applications.  
+- [x] **take_screenshot** — Take a screenshot of the device screen.  
+- [x] **send_key_event** — Send a key event to the device.  
+- [x] **send_nav_key_event** — Send a navigational key event (up, down, left, right, select, back, home).  
+- [x] **type_text** — Type text into the current input field.  
+- [x] **tap_screen** — Tap the screen at specific coordinates. 
+
 ## Installation & Usage
 
 1. **Build & install** the app on your Android TV device or set-top box.
